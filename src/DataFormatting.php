@@ -47,6 +47,7 @@ class DataFormatting {
 					['нониллион', 'нониллиона', 'нониллионов'],
 					['дециллион', 'дециллиона', 'дециллионов']
 				];
+				$unknown = '{неизвестно}';
 				$number_parts = preg_split('/(?=(\d{3})+(?!\d))/', $int, -1, PREG_SPLIT_NO_EMPTY);
 				$i = count($number_parts) - 1;
 				foreach ($number_parts as $j => $number_part) {
@@ -56,24 +57,18 @@ class DataFormatting {
 							$number_part_result[] = $hundreds[$hundred - 1];
 							$number_part -= $hundred * 100;
 						}
+						if ($number_part > 19) {
+							$ten = floor($number_part / 10);
+							$number_part_result[] = $tens[$ten - 1];
+							$number_part -= $ten * 10;
+						}
 						if ($number_part) {
-							if ($number_part > 19) {
-								$ten = floor($number_part / 10);
-								$number_part_result[] = $tens[$ten - 1];
-								$number_part -= $ten * 10;
-							}
-							if ($number_part) {
-								if (($i === 1) && in_array($number_part, [1, 2])) {
-									$number_part_result[] = $from_0_to_2[$number_part];
-								} else {
-									$number_part_result[] = $from_0_to_19[$number_part];
-								}
-							}
+							$number_part_result[] = (($i === 1) && in_array($number_part, [1, 2])) ? $from_0_to_2[$number_part] : $from_0_to_19[$number_part];
 						}
 						if (isset($thousands[$i - 1])) {
 							$number_part_result[] = $select_name($number_parts[$j], $thousands[$i - 1]);
 						} elseif ($i !== 0) {
-							$number_part_result[] = '{неизвестно}';
+							$number_part_result[] = $unknown;
 						} elseif ($names) {
 							$name = $select_name($number_parts[$j], $names);
 						}
