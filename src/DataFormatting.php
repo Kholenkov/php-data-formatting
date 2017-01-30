@@ -7,12 +7,12 @@ class DataFormatting {
 	public static function intToWords($int, $names = null) {
 		$result = [];
 		$int = is_scalar($int) ? (string) $int : '';
-		if (!is_array($names) || !isset($names[0]) || !isset($names[1]) || !isset($names[2])) {
+		if (!is_array($names) || !isset($names[0]) || !is_string($names[0]) || !isset($names[1]) || !is_string($names[1]) || !isset($names[2]) || !is_string($names[2])) {
 			$names = null;
 		}
 		if (strlen($int) && !preg_match('/[^0-9]/', $int)) {
 			$select_name = function($number, $names) {
-				return (string) $names[(((int) $number % 100 > 4) && ((int) $number % 100 < 20)) ? 2 : [2, 0, 1, 1, 1, 2][min((int) $number % 10, 5)]];
+				return $names[(((int) $number % 100 > 4) && ((int) $number % 100 < 20)) ? 2 : [2, 0, 1, 1, 1, 2][min((int) $number % 10, 5)]];
 			};
 			$name = null;
 			$zero = 'ноль';
